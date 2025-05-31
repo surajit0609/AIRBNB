@@ -9,6 +9,8 @@ const Reviews=require("./routes/review.js")
 const port = 8080;
 const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust';
 
+const session = require('express-session');
+const flash = require('connect-flash');
 // -------------------- View Engine --------------------
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -31,12 +33,32 @@ main()
 
 
 
-
-
-// -------------------- Routes --------------------
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
 });
+
+const sessionOptions = {
+  secret: 'mySecret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ 7 days in milliseconds
+    httpOnly: true                   // ✅ Helps prevent XSS
+  }
+}; 
+
+
+app.use(session(sessionOptions)); // ✅ CORRECT
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
+
+// -------------------- Routes --------------------
+
 
 app.use("/listings",Listings);
 
