@@ -23,7 +23,7 @@ const userRouter = require("./routes/user.js");
 const wrapAsync = require("./utils/wrapAsync.js");
 
 // -------------------- Config --------------------
-const port = process.env.PORT || 8080; // Use dynamic port on Render
+const port = process.env.PORT || 3000; // Use dynamic port on Render
 const dbUrl = process.env.MONGO_URL;
 const secret = process.env.SECRET || "thisshouldbeabettersecret";
 
